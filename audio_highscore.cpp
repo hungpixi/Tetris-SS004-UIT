@@ -3,3 +3,4 @@
 // Step 3: Beep audio frequency, highscore.txt file I/O step 3
 // Step 4: Beep audio frequency, highscore.txt file I/O step 4
 // Step 5: Beep audio frequency, highscore.txt file I/O step 5
+// Step 6: Beep audio frequency, highscore.txt file I/O step 6
