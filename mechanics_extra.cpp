@@ -2,3 +2,4 @@
 // Step 2: Hard drop tha roi ngay va o Hold Piece C/H buoc 2
 // Step 3: Hard drop tha roi ngay va o Hold Piece C/H buoc 3
 // Step 4: Hard drop tha roi ngay va o Hold Piece C/H buoc 4
+// Step 5: Hard drop tha roi ngay va o Hold Piece C/H buoc 5
