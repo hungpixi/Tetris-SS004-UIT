@@ -2,3 +2,4 @@
 // Step 2: Calculate score table, lines, combo & level progression step 2
 // Step 3: Calculate score table, lines, combo & level progression step 3
 // Step 4: Calculate score table, lines, combo & level progression step 4
+// Step 5: Calculate score table, lines, combo & level progression step 5
