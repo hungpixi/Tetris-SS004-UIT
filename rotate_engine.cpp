@@ -4,3 +4,4 @@
 // Step 4: Ma tran 4x4 cho khoi 4 va thuat toan Wall-Kick SRS
 // Step 5: Ma tran 4x4 cho khoi 5 va thuat toan Wall-Kick SRS
 // Step 6: Ma tran 4x4 cho khoi 6 va thuat toan Wall-Kick SRS
+// Step 7: Ma tran 4x4 cho khoi 7 va thuat toan Wall-Kick SRS
