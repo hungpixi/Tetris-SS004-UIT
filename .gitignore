@@ -1,0 +1,12 @@
+*.exe
+*.o
+*.obj
+bin/
+obj/
+highscore.txt
+.vscode/
+.vs/
+*.log
+*.aux
+*.out
+*.toc
