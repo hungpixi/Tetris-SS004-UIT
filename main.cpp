@@ -4,14 +4,11 @@
  * KHOA KỸ THUẬT MÁY TÍNH & KHOA HỌC MÁY TÍNH
  * MÔN HỌC: KỸ NĂNG NGHỀ NGHIỆP (SS004)
  * ----------------------------------------------------------------------------
- * ĐỒ ÁN CUỐI KỲ: TRÒ CHƠI TETRIS HOÀN CHỈNH (CONSOLE C++)
+ * ĐỒ ÁN CUỐI KỲ: TRÒ CHƠI TETRIS HOÀN CHỈNH (CONSOLE C++ PRO)
  * NHÓM THỰC HIỆN: NHÓM 01
- * CÁC THÀNH VIÊN:
- * 1. SV1: MSSV 23520001 - Nguyễn Văn An   (Trưởng nhóm - Quản lý & Core Architecture)
- * 2. SV2: MSSV 23520002 - Trần Minh Bình  (Xoay khối SRS & Xử lý va chạm)
- * 3. SV3: MSSV 23520003 - Lê Hoàng Cường  (UI/UX Console, Màu sắc & Render không nhấp nháy)
- * 4. SV4: MSSV 23520004 - Phạm Đức Duy    (Điểm số, Level, Next Piece & Hold Piece)
- * 5. SV5: MSSV 23520005 - Võ Thị Kim Em   (Âm thanh Beep, HighScore File & Game Flow)
+ * 1. Huỳnh Nguyễn Hoài Thương - 26730069 (Trưởng nhóm)
+ * 2. Nguyễn Ngọc Duy          - 26730013 (Thành viên)
+ * 3. Phạm Phú Nguyễn Hưng     - 26730023 (Thành viên - Quản trị Git)
  * ============================================================================
  */
 
@@ -26,15 +23,11 @@
 
 using namespace std;
 
-// ==========================================
-// CÁC HẰNG SỐ CẤU HÌNH TRÒ CHƠI
-// ==========================================
-const int BOARD_HEIGHT = 20; // Chiều cao vùng chơi
-const int BOARD_WIDTH  = 10; // Chiều rộng vùng chơi
-const int OFFSET_X     = 4;  // Tọa độ X vẽ bảng trên Console
-const int OFFSET_Y     = 2;  // Tọa độ Y vẽ bảng trên Console
+const int BOARD_HEIGHT = 20;
+const int BOARD_WIDTH  = 10;
+const int OFFSET_X     = 3;
+const int OFFSET_Y     = 2;
 
-// Màu sắc Console (Windows Console API)
 enum ConsoleColor {
     COLOR_BLACK         = 0,
     COLOR_DARK_BLUE     = 1,
@@ -54,63 +47,50 @@ enum ConsoleColor {
     COLOR_WHITE         = 15
 };
 
-// 7 loại Tetromino chuẩn
-enum TetrominoType {
-    PIECE_I = 0,
-    PIECE_O = 1,
-    PIECE_T = 2,
-    PIECE_S = 3,
-    PIECE_Z = 4,
-    PIECE_J = 5,
-    PIECE_L = 6,
-    PIECE_NONE = 7
-};
-
-// Dữ liệu 4 trạng thái xoay của 7 loại khối (4x4 matrix)
 const int PIECES[7][4][4][4] = {
-    // 0: Khối I (Cyan)
+    // 0: I
     {
         {{0,0,0,0},{1,1,1,1},{0,0,0,0},{0,0,0,0}},
         {{0,0,1,0},{0,0,1,0},{0,0,1,0},{0,0,1,0}},
         {{0,0,0,0},{0,0,0,0},{1,1,1,1},{0,0,0,0}},
         {{0,1,0,0},{0,1,0,0},{0,1,0,0},{0,1,0,0}}
     },
-    // 1: Khối O (Yellow)
+    // 1: O
     {
         {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}}
     },
-    // 2: Khối T (Purple / Magenta)
+    // 2: T
     {
         {{0,1,0,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,0,0},{0,1,1,0},{0,1,0,0},{0,0,0,0}},
         {{0,0,0,0},{1,1,1,0},{0,1,0,0},{0,0,0,0}},
         {{0,1,0,0},{1,1,0,0},{0,1,0,0},{0,0,0,0}}
     },
-    // 3: Khối S (Green)
+    // 3: S
     {
         {{0,1,1,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,0,0},{0,1,1,0},{0,0,1,0},{0,0,0,0}},
         {{0,0,0,0},{0,1,1,0},{1,1,0,0},{0,0,0,0}},
         {{1,0,0,0},{1,1,0,0},{0,1,0,0},{0,0,0,0}}
     },
-    // 4: Khối Z (Red)
+    // 4: Z
     {
         {{1,1,0,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,0,1,0},{0,1,1,0},{0,1,0,0},{0,0,0,0}},
         {{0,0,0,0},{1,1,0,0},{0,1,1,0},{0,0,0,0}},
         {{0,1,0,0},{1,1,0,0},{1,0,0,0},{0,0,0,0}}
     },
-    // 5: Khối J (Blue)
+    // 5: J
     {
         {{1,0,0,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,1,0},{0,1,0,0},{0,1,0,0},{0,0,0,0}},
         {{0,0,0,0},{1,1,1,0},{0,0,1,0},{0,0,0,0}},
         {{0,1,0,0},{0,1,0,0},{1,1,0,0},{0,0,0,0}}
     },
-    // 6: Khối L (Orange / Dark Yellow)
+    // 6: L
     {
         {{0,0,1,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}},
         {{0,1,0,0},{0,1,0,0},{0,1,1,0},{0,0,0,0}},
@@ -120,18 +100,15 @@ const int PIECES[7][4][4][4] = {
 };
 
 const ConsoleColor PIECE_COLORS[7] = {
-    COLOR_CYAN,        // I
-    COLOR_YELLOW,      // O
-    COLOR_MAGENTA,     // T
-    COLOR_GREEN,       // S
-    COLOR_RED,         // Z
-    COLOR_BLUE,        // J
-    COLOR_DARK_YELLOW  // L
+    COLOR_CYAN,
+    COLOR_YELLOW,
+    COLOR_MAGENTA,
+    COLOR_GREEN,
+    COLOR_RED,
+    COLOR_BLUE,
+    COLOR_DARK_YELLOW
 };
 
-// ==========================================
-// CÁC HÀM TIỆN ÍCH CONSOLE (SV3 & SV5)
-// ==========================================
 void gotoxy(int x, int y) {
     COORD coord;
     coord.X = x;
@@ -143,45 +120,37 @@ void setColor(int textColor, int bgColor = 0) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgColor << 4) | textColor);
 }
 
-void hideCursor() {
+void setupConsole() {
+    HWND console = GetConsoleWindow();
+    RECT r;
+    GetWindowRect(console, &r);
+    MoveWindow(console, r.left, r.top, 780, 680, TRUE);
+
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_CURSOR_INFO info;
     info.dwSize = 100;
     info.bVisible = FALSE;
     SetConsoleCursorInfo(consoleHandle, &info);
+    system("cls");
 }
 
 void playSoundEffect(int type) {
-    // SV5: Âm thanh thông báo
     switch (type) {
-        case 1: Beep(900, 30); break;   // Move / Rotate
-        case 2: Beep(500, 40); break;   // Drop / Lock
-        case 3: Beep(1200, 100); break; // Clear line
-        case 4:                         // Tetris Clear Combo
-            Beep(1000, 80);
-            Beep(1400, 80);
-            Beep(1800, 120);
-            break;
-        case 5:                         // Game Over
-            Beep(600, 200);
-            Beep(400, 200);
-            Beep(250, 400);
-            break;
+        case 1: Beep(900, 25); break;
+        case 2: Beep(450, 30); break;
+        case 3: Beep(1100, 80); break;
+        case 4: Beep(1000, 60); Beep(1400, 80); Beep(1800, 100); break;
+        case 5: Beep(500, 150); Beep(300, 250); break;
     }
 }
 
-// ==========================================
-// LỚP TETROMINO (SV2: Di chuyển, xoay khối SRS)
-// ==========================================
 class Piece {
 public:
     int type;
     int rotation;
     int x, y;
 
-    Piece() {
-        reset(rand() % 7);
-    }
+    Piece() { reset(rand() % 7); }
 
     void reset(int t) {
         type = t;
@@ -190,18 +159,10 @@ public:
         y = 0;
     }
 
-    void rotate() {
-        rotation = (rotation + 1) % 4;
-    }
-
-    void unrotate() {
-        rotation = (rotation + 3) % 4;
-    }
+    void rotate() { rotation = (rotation + 1) % 4; }
+    void unrotate() { rotation = (rotation + 3) % 4; }
 };
 
-// ==========================================
-// LỚP QUẢN LÝ BẢN ĐỒ VÀ ĐIỂM SỐ (SV1, SV4, SV5)
-// ==========================================
 class TetrisGame {
 private:
     int board[BOARD_HEIGHT][BOARD_WIDTH];
@@ -230,7 +191,7 @@ public:
     void initGame() {
         for (int r = 0; r < BOARD_HEIGHT; r++) {
             for (int c = 0; c < BOARD_WIDTH; c++) {
-                board[r][c] = -1; // -1: ô trống
+                board[r][c] = -1;
             }
         }
         score = 0;
@@ -265,17 +226,13 @@ public:
         }
     }
 
-    // SV2: Kiểm tra va chạm
     bool isValidPosition(int px, int py, int prot, int ptype) {
         for (int r = 0; r < 4; r++) {
             for (int c = 0; c < 4; c++) {
                 if (PIECES[ptype][prot][r][c]) {
                     int bx = px + c;
                     int by = py + r;
-
-                    // Ngoài biên
                     if (bx < 0 || bx >= BOARD_WIDTH || by >= BOARD_HEIGHT) return false;
-                    // Chạm khối đã đặt
                     if (by >= 0 && board[by][bx] != -1) return false;
                 }
             }
@@ -283,21 +240,14 @@ public:
         return true;
     }
 
-    // SV2: Xoay khối với cơ chế Wall-kick cơ bản
     void rotatePiece() {
         int oldRot = currentPiece.rotation;
         currentPiece.rotate();
-        
         if (!isValidPosition(currentPiece.x, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
-            // Thử Wall-kick dịch sang trái 1 ô
-            if (isValidPosition(currentPiece.x - 1, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
+            if (isValidPosition(currentPiece.x - 1, currentPiece.y, currentPiece.rotation, currentPiece.type))
                 currentPiece.x -= 1;
-            }
-            // Thử Wall-kick dịch sang phải 1 ô
-            else if (isValidPosition(currentPiece.x + 1, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
+            else if (isValidPosition(currentPiece.x + 1, currentPiece.y, currentPiece.rotation, currentPiece.type))
                 currentPiece.x += 1;
-            }
-            // Không xoay được thì trả về vị trí cũ
             else {
                 currentPiece.rotation = oldRot;
                 return;
@@ -306,10 +256,8 @@ public:
         playSoundEffect(1);
     }
 
-    // SV4: Tính năng Hold Piece
     void holdCurrentPiece() {
         if (!canHold) return;
-
         if (!hasHoldPiece) {
             holdPiece.type = currentPiece.type;
             hasHoldPiece = true;
@@ -324,7 +272,6 @@ public:
         playSoundEffect(1);
     }
 
-    // Khóa khối vào bàn chơi khi tiếp đất
     void lockPiece() {
         for (int r = 0; r < 4; r++) {
             for (int c = 0; c < 4; c++) {
@@ -340,12 +287,10 @@ public:
         playSoundEffect(2);
         clearLines();
 
-        // Đổi khối tiếp theo
         currentPiece.reset(nextPiece.type);
         nextPiece.reset(rand() % 7);
         canHold = true;
 
-        // Nếu khối mới sinh ra mà bị đè -> Game Over
         if (!isValidPosition(currentPiece.x, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
             isGameOver = true;
             saveHighScore();
@@ -353,7 +298,6 @@ public:
         }
     }
 
-    // SV4: Xóa hàng đầy & Tính điểm
     void clearLines() {
         int clearedCount = 0;
         for (int r = BOARD_HEIGHT - 1; r >= 0; r--) {
@@ -374,19 +318,18 @@ public:
                 for (int col = 0; col < BOARD_WIDTH; col++) {
                     board[0][col] = -1;
                 }
-                r++; // Kiểm tra lại hàng này sau khi đã dồn xuống
+                r++;
             }
         }
 
         if (clearedCount > 0) {
             linesCleared += clearedCount;
-            // Hệ thống điểm chuẩn
             int points = 0;
             switch (clearedCount) {
                 case 1: points = 100 * level; playSoundEffect(3); break;
                 case 2: points = 300 * level; playSoundEffect(3); break;
                 case 3: points = 500 * level; playSoundEffect(3); break;
-                case 4: points = 800 * level; playSoundEffect(4); break; // TETRIS!
+                case 4: points = 800 * level; playSoundEffect(4); break;
             }
             score += points;
             level = 1 + linesCleared / 10;
@@ -394,7 +337,6 @@ public:
         }
     }
 
-    // Tính toán bóng khối rơi (Ghost Piece)
     int getGhostY() {
         int gy = currentPiece.y;
         while (isValidPosition(currentPiece.x, gy + 1, currentPiece.rotation, currentPiece.type)) {
@@ -403,7 +345,6 @@ public:
         return gy;
     }
 
-    // Hard drop
     void hardDrop() {
         int dropDistance = 0;
         while (isValidPosition(currentPiece.x, currentPiece.y + 1, currentPiece.rotation, currentPiece.type)) {
@@ -414,31 +355,26 @@ public:
         lockPiece();
     }
 
-    // SV3: Render giao diện không nhấp nháy
+    // Render hoàn toàn không bị trôi dòng
     void render() {
         gotoxy(0, 0);
 
-        // Header
-        setColor(COLOR_YELLOW);
-        cout << "========================================================\n";
-        cout << "   [UIT - SS004] TRO CHOI TETRIS - NHOM 01 (C++ CONSOLE)\n";
-        cout << "========================================================\n\n";
+        setColor(COLOR_CYAN);
+        cout << "================================================================\n";
+        cout << "   [UIT - SS004] TRO CHOI TETRIS - NHOM 01 (C++ CONSOLE PRO)    \n";
+        cout << "================================================================\n";
 
         int ghostY = getGhostY();
 
-        // Vẽ Khung Bàn Chơi và Thông Tin Phụ
         for (int r = 0; r < BOARD_HEIGHT; r++) {
-            // Lề trái
-            gotoxy(OFFSET_X, OFFSET_Y + r + 3);
+            gotoxy(OFFSET_X, OFFSET_Y + r + 2);
             setColor(COLOR_WHITE);
             cout << "<!";
 
-            // Vẽ các ô trong dòng
             for (int c = 0; c < BOARD_WIDTH; c++) {
                 int cellColor = board[r][c];
-
-                // Kiểm tra xem ô có thuộc khối đang rơi không
                 bool isCurrent = false;
+
                 for (int pr = 0; pr < 4; pr++) {
                     for (int pc = 0; pc < 4; pc++) {
                         if (PIECES[currentPiece.type][currentPiece.rotation][pr][pc]) {
@@ -450,7 +386,6 @@ public:
                     }
                 }
 
-                // Kiểm tra xem ô có thuộc Ghost piece không
                 bool isGhost = false;
                 if (!isCurrent) {
                     for (int pr = 0; pr < 4; pr++) {
@@ -479,17 +414,15 @@ public:
                 }
             }
 
-            // Lề phải
             setColor(COLOR_WHITE);
-            cout << "!>";
+            cout << "!>   ";
 
-            // Panel bên phải: Thông tin điểm, Level, Next Piece, Hold Piece
-            int panelX = OFFSET_X + BOARD_WIDTH * 2 + 6;
-            gotoxy(panelX, OFFSET_Y + r + 3);
+            // Panel thông tin bên phải được format cố định
+            int panelX = OFFSET_X + BOARD_WIDTH * 2 + 7;
+            gotoxy(panelX, OFFSET_Y + r + 2);
 
             if (r == 0) {
-                setColor(COLOR_GREEN);
-                cout << "+-----------------------+";
+                setColor(COLOR_GREEN); cout << "+-----------------------+";
             } else if (r == 1) {
                 setColor(COLOR_GREEN); cout << "| ";
                 setColor(COLOR_YELLOW); cout << "SCORE:      ";
@@ -511,144 +444,121 @@ public:
                 setColor(COLOR_WHITE); printf("%-9d", linesCleared);
                 setColor(COLOR_GREEN); cout << " |";
             } else if (r == 5) {
-                setColor(COLOR_GREEN);
-                cout << "+-----------------------+";
+                setColor(COLOR_GREEN); cout << "+-----------------------+";
             } else if (r == 7) {
-                setColor(COLOR_CYAN);
-                cout << "  [ NEXT PIECE ]";
+                setColor(COLOR_CYAN); cout << " [ NEXT PIECE ]          ";
             } else if (r >= 8 && r <= 11) {
                 int pr = r - 8;
-                cout << "     ";
+                cout << "   ";
                 for (int pc = 0; pc < 4; pc++) {
                     if (PIECES[nextPiece.type][0][pr][pc]) {
-                        setColor(PIECE_COLORS[nextPiece.type]);
-                        cout << "[]";
+                        setColor(PIECE_COLORS[nextPiece.type]); cout << "[]";
                     } else {
                         cout << "  ";
                     }
                 }
+                cout << "         ";
             } else if (r == 13) {
-                setColor(COLOR_MAGENTA);
-                cout << "  [ HOLD PIECE (C/H) ]";
+                setColor(COLOR_MAGENTA); cout << " [ HOLD PIECE (C/H) ]    ";
             } else if (r >= 14 && r <= 17) {
                 int pr = r - 14;
-                cout << "     ";
+                cout << "   ";
                 if (hasHoldPiece) {
                     for (int pc = 0; pc < 4; pc++) {
                         if (PIECES[holdPiece.type][0][pr][pc]) {
-                            setColor(PIECE_COLORS[holdPiece.type]);
-                            cout << "[]";
+                            setColor(PIECE_COLORS[holdPiece.type]); cout << "[]";
                         } else {
                             cout << "  ";
                         }
                     }
                 } else {
-                    setColor(COLOR_DARK_GRAY);
-                    cout << "   (None)   ";
+                    setColor(COLOR_DARK_GRAY); cout << "(Chua giu)  ";
                 }
+                cout << "         ";
+            } else {
+                cout << "                         ";
             }
         }
 
-        // Đáy bàn cờ
-        gotoxy(OFFSET_X, OFFSET_Y + BOARD_HEIGHT + 3);
+        gotoxy(OFFSET_X, OFFSET_Y + BOARD_HEIGHT + 2);
         setColor(COLOR_WHITE);
-        cout << "<!====================!>\n";
-        gotoxy(OFFSET_X + 2, OFFSET_Y + BOARD_HEIGHT + 4);
-        cout << "\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n\n";
+        cout << "<!====================!>                         \n";
+        gotoxy(OFFSET_X, OFFSET_Y + BOARD_HEIGHT + 3);
+        cout << "  \\/\\/\\/\\/\\/\\/\\/\\/\\/\\/                           \n\n";
 
-        // Hướng dẫn phím bấm
         setColor(COLOR_GRAY);
-        cout << " [A]/[D] hoac [<-]/[->]: Sang trai/phai  | [W] / [^]: Xoay khoi\n";
-        cout << " [S]     hoac [v]     : Roi nhanh        | [SPACE]  : Tha roi ngay (Hard Drop)\n";
-        cout << " [C] / [H]            : Hold Giu khoi    | [P]: Tam dung | [R]: Choi lai | [Q]: Thoat\n";
+        cout << " Dieu khien: [A]/[D] hoac [<-]/[->]: Sang trai/phai | [W]/[^]: Xoay (SRS) \n";
+        cout << "             [S] hoac [v]: Roi nhanh | [SPACE]: Tha roi ngay (Hard Drop) \n";
+        cout << "             [C]/[H]: Hold khoi | [P]: Tam dung | [R]: Choi lai | [Q]: Thoat\n";
 
-        // Trạng thái Pause / Game Over
         if (isPaused) {
-            gotoxy(OFFSET_X + 4, OFFSET_Y + BOARD_HEIGHT / 2 + 2);
+            gotoxy(OFFSET_X + 2, OFFSET_Y + BOARD_HEIGHT / 2 + 1);
             setColor(COLOR_YELLOW, COLOR_DARK_RED);
             cout << " *** GAME TAM DUNG (PAUSED) - BAM [P] DE TIEP TUC *** ";
             setColor(COLOR_WHITE, COLOR_BLACK);
         } else if (isGameOver) {
-            gotoxy(OFFSET_X + 6, OFFSET_Y + BOARD_HEIGHT / 2 + 1);
-            setColor(COLOR_RED, COLOR_WHITE);
-            cout << " ============================== ";
-            gotoxy(OFFSET_X + 6, OFFSET_Y + BOARD_HEIGHT / 2 + 2);
+            gotoxy(OFFSET_X + 3, OFFSET_Y + BOARD_HEIGHT / 2);
+            setColor(COLOR_RED, COLOR_WHITE); cout << " ============================== ";
+            gotoxy(OFFSET_X + 3, OFFSET_Y + BOARD_HEIGHT / 2 + 1);
             cout << "       GAME OVER! BAN THUA      ";
-            gotoxy(OFFSET_X + 6, OFFSET_Y + BOARD_HEIGHT / 2 + 3);
+            gotoxy(OFFSET_X + 3, OFFSET_Y + BOARD_HEIGHT / 2 + 2);
             cout << "   BAM [R] CHOI LAI - [Q] THOAT ";
-            gotoxy(OFFSET_X + 6, OFFSET_Y + BOARD_HEIGHT / 2 + 4);
+            gotoxy(OFFSET_X + 3, OFFSET_Y + BOARD_HEIGHT / 2 + 3);
             cout << " ============================== ";
             setColor(COLOR_WHITE, COLOR_BLACK);
         }
     }
 
-    // Vòng lặp trò chơi chính
     void run() {
-        hideCursor();
+        setupConsole();
         int tickCounter = 0;
 
         while (true) {
-            // Tốc độ rơi theo Level
             int dropInterval = max(1, 10 - level);
 
-            // Xử lý Input bàn phím
             if (kbhit()) {
                 int ch = getch();
-                if (ch == 224) { // Phím mũi tên
+                if (ch == 224) {
                     ch = getch();
                     if (!isGameOver && !isPaused) {
                         if (ch == 75 && isValidPosition(currentPiece.x - 1, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
-                            currentPiece.x--;
-                            playSoundEffect(1);
+                            currentPiece.x--; playSoundEffect(1);
                         } else if (ch == 77 && isValidPosition(currentPiece.x + 1, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
-                            currentPiece.x++;
-                            playSoundEffect(1);
-                        } else if (ch == 72) { // Up arrow
+                            currentPiece.x++; playSoundEffect(1);
+                        } else if (ch == 72) {
                             rotatePiece();
-                        } else if (ch == 80) { // Down arrow (soft drop)
+                        } else if (ch == 80) {
                             if (isValidPosition(currentPiece.x, currentPiece.y + 1, currentPiece.rotation, currentPiece.type)) {
-                                currentPiece.y++;
-                                score += 1;
+                                currentPiece.y++; score += 1;
                             }
                         }
                     }
                 } else {
                     char c = tolower(ch);
-                    if (c == 'q') {
-                        saveHighScore();
-                        break;
-                    }
-                    if (c == 'p' && !isGameOver) {
-                        isPaused = !isPaused;
-                    }
-                    if (c == 'r' && isGameOver) {
-                        initGame();
-                    }
+                    if (c == 'q') { saveHighScore(); break; }
+                    if (c == 'p' && !isGameOver) isPaused = !isPaused;
+                    if (c == 'r' && isGameOver) { initGame(); system("cls"); }
 
                     if (!isGameOver && !isPaused) {
                         if ((c == 'a') && isValidPosition(currentPiece.x - 1, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
-                            currentPiece.x--;
-                            playSoundEffect(1);
+                            currentPiece.x--; playSoundEffect(1);
                         } else if ((c == 'd') && isValidPosition(currentPiece.x + 1, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
-                            currentPiece.x++;
-                            playSoundEffect(1);
+                            currentPiece.x++; playSoundEffect(1);
                         } else if (c == 'w') {
                             rotatePiece();
-                        } else if (c == 's') { // Soft drop
+                        } else if (c == 's') {
                             if (isValidPosition(currentPiece.x, currentPiece.y + 1, currentPiece.rotation, currentPiece.type)) {
-                                currentPiece.y++;
-                                score += 1;
+                                currentPiece.y++; score += 1;
                             }
-                        } else if (c == ' ') { // Hard drop
+                        } else if (c == ' ') {
                             hardDrop();
-                        } else if (c == 'c' || c == 'h') { // Hold
+                        } else if (c == 'c' || c == 'h') {
                             holdCurrentPiece();
                         }
                     }
                 }
             }
 
-            // Tự động rơi theo nhịp game
             if (!isGameOver && !isPaused) {
                 tickCounter++;
                 if (tickCounter >= dropInterval) {
@@ -662,20 +572,14 @@ public:
             }
 
             render();
-            Sleep(40); // 25 FPS mượt mà
+            Sleep(40);
         }
     }
 };
 
 int main() {
-    // Đặt tiêu đề Console và chế độ hiển thị
-    SetConsoleTitleA("UIT - SS004: Tetris Game - Nhom 01");
-    
+    SetConsoleTitleA("UIT - SS004: Tetris Game Pro - Nhom 01");
     TetrisGame game;
     game.run();
-
-    gotoxy(0, OFFSET_Y + BOARD_HEIGHT + 7);
-    setColor(COLOR_WHITE);
-    cout << "Cam on ban da trai nghiem tro choi Tetris!\n";
     return 0;
 }
