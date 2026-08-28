@@ -4,3 +4,4 @@
 // Step 4: Console double buffer & ANSI/Windows colors step 4
 // Step 5: Console double buffer & ANSI/Windows colors step 5
 // Step 6: Console double buffer & ANSI/Windows colors step 6
+// Step 7: Console double buffer & ANSI/Windows colors step 7
