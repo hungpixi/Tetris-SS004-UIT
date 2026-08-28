@@ -1,1 +1,2 @@
 // Step 1: Am thanh Beep tan so cao va doc/ghi file highscore.txt buoc 1
+// Step 2: Am thanh Beep tan so cao va doc/ghi file highscore.txt buoc 2
