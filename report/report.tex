@@ -1,0 +1,373 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage[a4paper,left=2.5cm,right=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+% Cấu hình liên kết
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!80!black,
+    citecolor=blue!80!black,
+    urlcolor=blue!80!black
+}
+
+% Cấu hình Header & Footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \textit{UIT - SS004: Kỹ năng nghề nghiệp}}
+\fancyhead[R]{\small \textit{Đồ án cuối kỳ: Trò chơi Tetris}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Cấu hình hiển thị code C++
+\lstset{
+    language=C++,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{red!70!black},
+    commentstyle=\color{green!50!black}\itshape,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    backgroundcolor=\color{gray!5},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{gray!40},
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false
+}
+
+\begin{document}
+
+% ==========================================
+% TRANG BÌA
+% ==========================================
+\begin{titlepage}
+    \begin{center}
+        \textbf{\large ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH}\\[0.2cm]
+        \textbf{\large TRƯỜNG ĐẠI HỌC CÔNG NGHỆ THÔNG TIN}\\[0.5cm]
+        \textbf{\large KHOA KỸ THUẬT MÁY TÍNH \& KHOA HỌC MÁY TÍNH}\\[1.5cm]
+        
+        \includegraphics[width=0.25\textwidth]{https://upload.wikimedia.org/wikipedia/commons/e/ea/Logo_UIT_updated.png}\\[1.5cm]
+        
+        \textbf{\Large BÁO CÁO ĐỒ ÁN CUỐI KỲ}\\[0.3cm]
+        \textbf{\Huge XÂY DỰNG TRÒ CHƠI TETRIS}\\[0.2cm]
+        \textbf{\LARGE VÀ QUẢN LÝ DỰ ÁN NHÓM VỚI GIT/GITHUB}\\[1.2cm]
+        
+        \textbf{\large MÔN HỌC: KỸ NĂNG NGHỀ NGHIỆP (SS004)}\\[0.2cm]
+        \textbf{\large GIẢNG VIÊN HƯỚNG DẪN: ThS. NGUYỄN VĂN TOÀN}\\[1.5cm]
+        
+        \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,title=\textbf{THÔNG TIN NHÓM THỰC HIỆN - NHÓM 01}]
+            \begin{tabularx}{\textwidth}{llX}
+                \textbf{STT} & \textbf{Họ và Tên} & \textbf{Mã số sinh viên} \\
+                \midrule
+                1 & Huỳnh Nguyễn Hoài Thương (Trưởng nhóm) & 26730069 \\
+                2 & Nguyễn Ngọc Duy & 26730013 \\
+                3 & Phạm Phú Nguyễn Hưng (GitHub: \texttt{hungpixi}) & 26730023 \\
+            \end{tabularx}
+        \end{tcolorbox}
+        
+        \vfill
+        {\large TP. HỒ CHÍ MINH, THÁNG 08/2026}
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==========================================
+% PHẦN 1: HỢP ĐỒNG NHÓM
+% ==========================================
+\section{Hợp đồng nhóm (Team Working Agreement)}
+
+\begin{tcolorbox}[colback=yellow!10!white,colframe=orange!80!black,title=\textbf{BẢN CAM KẾT VÀ NGUYÊN TẮC LÀM VIỆC NHÓM}]
+    Hôm nay, ngày 01 tháng 08 năm 2026, toàn thể 3 thành viên Nhóm học phần \textbf{Kỹ năng nghề nghiệp (SS004)} thống nhất ký kết bản Hợp đồng nhóm với các điều khoản sau đây:
+\end{tcolorbox}
+
+\subsection{Thông tin các thành viên tham gia}
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{clllX}
+\toprule
+\textbf{STT} & \textbf{Họ và Tên} & \textbf{MSSV} & \textbf{Email UIT / Slack} & \textbf{Vai trò chính} \\
+\midrule
+1 & Huỳnh Nguyễn Hoài Thương & 26730069 & \texttt{26730069@gm.uit.edu.vn} & Trưởng nhóm, Core Engine, Phân chia task \\
+2 & Nguyễn Ngọc Duy & 26730013 & \texttt{26730013@gm.uit.edu.vn} & Xoay khối SRS, Score, Level \& Wall-Kick \\
+3 & Phạm Phú Nguyễn Hưng & 26730023 & \texttt{26730023@gm.uit.edu.vn} & Quản trị Git, UI Render mượt, Âm thanh \& Báo cáo \\
+\bottomrule
+\end{tabularx}
+\caption{Danh sách phân công nhân sự nhóm}
+\end{table}
+
+\subsection{Các nguyên tắc và quy định làm việc}
+\begin{enumerate}[label=\textbf{Điều \arabic*:}]
+    \item \textbf{Cam kết tiến độ:} Mọi thành viên phải hoàn thành công việc được giao trước hạn chót (Deadline) ít nhất 24 giờ.
+    \item \textbf{Giao tiếp và phản hồi:} Toàn bộ trao đổi kỹ thuật diễn ra công khai trên kênh Slack \href{https://ss004f31.slack.com}{\texttt{ss004f31.slack.com}}. Thành viên phản hồi tin nhắn trong vòng tối đa 4 giờ.
+    \item \textbf{Quy chuẩn Git:} Tuyệt đối không push trực tiếp lên nhánh \texttt{main}. Mọi tính năng phải tạo branch riêng theo định dạng \texttt{feature/<ten-tinh-nang>}, có review trước khi merge.
+    \item \textbf{Quy tắc giải quyết xung đột:} Khi phát sinh bất đồng kỹ thuật, nhóm sẽ thảo luận trên Slack hoặc Trưởng nhóm đưa ra quyết định cuối cùng dựa trên tính tối ưu của đồ án.
+    \item \textbf{Chế tài và kỷ luật:} Thành viên hoàn thành xuất sắc cam kết đúng tiến độ và chất lượng mã nguồn.
+\end{enumerate}
+
+\subsection{Bảng chữ ký xác nhận của các thành viên}
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{XXX}
+\textbf{Trưởng nhóm} & \textbf{Thành viên} & \textbf{Thành viên (Quản trị Git)} \\
+\textit{(Đã ký số)} & \textit{(Đã ký số)} & \textit{(Đã ký số)} \\[0.6cm]
+\textbf{Huỳnh Nguyễn Hoài Thương} & \textbf{Nguyễn Ngọc Duy} & \textbf{Phạm Phú Nguyễn Hưng} \\
+\end{tabularx}
+\end{table}
+
+\newpage
+
+% ==========================================
+% PHẦN 2: CÁC ĐƯỜNG LINK CÔNG CỤ
+% ==========================================
+\section{Các liên kết công cụ quản lý \& phát triển}
+
+Nhóm đã thiết lập và mời Giảng viên (\textbf{account: \href{mailto:toannv@uit.edu.vn}{toannv@uit.edu.vn}}) tham gia đầy đủ các nền tảng:
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Công cụ} & \textbf{Mục đích sử dụng} & \textbf{Đường dẫn (URL)} \\
+\midrule
+\textbf{GitHub Repo} & Quản lý mã nguồn, Branches, PRs & \href{https://github.com/hungpixi/Tetris-SS004-UIT}{https://github.com/hungpixi/Tetris-SS004-UIT} \\
+\textbf{GitHub Release} & \textbf{Tải file chạy trực tiếp (.exe)} & \href{https://github.com/hungpixi/Tetris-SS004-UIT/releases/tag/v1.0.0}{https://github.com/hungpixi/Tetris-SS004-UIT/releases/tag/v1.0.0} \\
+\textbf{GitHub Projects} & Quản lý tiến độ Kanban theo Agile & \href{https://github.com/users/hungpixi/projects/1}{https://github.com/users/hungpixi/projects/1} \\
+\textbf{Slack Workspace} & Kênh trao đổi, họp nhóm hằng ngày & \href{https://ss004f31.slack.com}{https://ss004f31.slack.com} \\
+\textbf{Overleaf / Prism} & Soạn thảo báo cáo LaTeX chuẩn & \href{https://www.overleaf.com/project/66ce301a91}{https://www.overleaf.com/project/66ce301a91} \\
+\bottomrule
+\end{tabularx}
+\caption{Danh sách liên kết các công cụ của dự án}
+\end{table}
+
+\begin{tcolorbox}[colback=green!5!white,colframe=green!60!black]
+    \textbf{Tải game trực tiếp:} Người chơi và Giảng viên có thể tải file chạy độc lập \texttt{Tetris\_Game\_v1.0.exe} tại mục GitHub Releases để trải nghiệm ngay mà không cần cài đặt trình biên dịch.
+\end{tcolorbox}
+
+\newpage
+
+% ==========================================
+% PHẦN 3: GIỚI THIỆU & HƯỚNG DẪN CHƠI GAME
+% ==========================================
+\section{Giới thiệu và Hướng dẫn chơi game (User Manual)}
+
+\subsection{Tổng quan về trò chơi Tetris}
+Tetris là một trong những tựa game giải đố xếp hình kinh điển nhất mọi thời đại. Mục tiêu của trò chơi là sắp xếp các khối gạch rơi xuống (gọi là \textit{Tetromino}) vào bàn cờ sao cho tạo thành các đường ngang lấp đầy để ghi điểm và ngăn chặn việc các khối chồng chất lên đến đỉnh bàn cờ.
+
+\subsection{Giao diện trò chơi trên Console}
+Trò chơi được thiết kế với giao diện đồ họa Console sinh động, bao gồm các thành phần:
+\begin{itemize}
+    \item \textbf{Bàn chơi chính (Playfield):} Kích thước chuẩn 10 cột $\times$ 20 hàng, bao quanh bởi khung viền kim loại chắc chắn.
+    \item \textbf{Bóng khối rơi (Ghost Piece):} Hiển thị dấu \texttt{::} mô phỏng vị trí mà khối sẽ tiếp đất, giúp người chơi căn chỉnh chính xác tuyệt đối.
+    \item \textbf{Bảng hiển thị bên phải (Side Panel):}
+    \begin{itemize}
+        \item \textbf{Score \& High Score:} Điểm số hiện tại và kỷ lục cao nhất được lưu vĩnh viễn vào file \texttt{highscore.txt}.
+        \item \textbf{Level \& Lines:} Cấp độ hiện tại và tổng số dòng đã xóa được.
+        \item \textbf{Next Piece:} Khung xem trước hình dạng khối gạch tiếp theo.
+        \item \textbf{Hold Piece:} Ô giữ lại khối gạch khẩn cấp khi người chơi cần chiến thuật khác.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Bảng phím điều khiển}
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{cXl}
+\toprule
+\textbf{Phím tắt} & \textbf{Chức năng} & \textbf{Ghi chú} \\
+\midrule
+\texttt{A} hoặc $\leftarrow$ & Di chuyển khối sang trái 1 ô & Âm thanh click \\
+\texttt{D} hoặc $\rightarrow$ & Di chuyển khối sang phải 1 ô & Âm thanh click \\
+\texttt{W} hoặc $\uparrow$ & Xoay khối 90 độ theo chiều kim đồng hồ & Cơ chế SRS Wall-Kick \\
+\texttt{S} hoặc $\downarrow$ & Thả rơi nhanh (Soft Drop) & Tăng điểm rơi $+1$ \\
+\texttt{Space} & Thả rơi ngay lập tức (Hard Drop) & Khóa khối ngay, $+2$ điểm/ô \\
+\texttt{C} hoặc \texttt{H} & Đổi / Giữ khối (Hold Piece) & Mỗi lượt chỉ đổi 1 lần \\
+\texttt{P} & Tạm dừng hoặc tiếp tục trò chơi (Pause/Resume) & \\
+\texttt{R} & Chơi lại từ đầu khi Game Over & \\
+\texttt{Q} & Lưu kỷ lục điểm và thoát game & \\
+\bottomrule
+\end{tabularx}
+\caption{Bảng phím điều khiển trong game}
+\end{table}
+
+\subsection{Hệ thống tính điểm và cấp độ (Level Progression)}
+\begin{itemize}
+    \item \textbf{Xóa 1 dòng (Single):} $100 \times \text{Level}$ điểm.
+    \item \textbf{Xóa 2 dòng (Double):} $300 \times \text{Level}$ điểm.
+    \item \textbf{Xóa 3 dòng (Triple):} $500 \times \text{Level}$ điểm.
+    \item \textbf{Xóa 4 dòng (TETRIS!):} $800 \times \text{Level}$ điểm kèm hiệu ứng âm thanh đặc biệt.
+    \item Cứ mỗi 10 dòng xóa được, trò chơi sẽ tăng thêm 1 Level, đồng thời tăng tốc độ rơi của các khối gạch.
+\end{itemize}
+
+\newpage
+
+% ==========================================
+% PHẦN 4: TÀI LIỆU KỸ THUẬT CỦA TRÒ CHƠI
+% ==========================================
+\section{Tài liệu kỹ thuật của trò chơi (Technical Documentation)}
+
+\subsection{Kiến trúc tổng thể hệ thống (Architecture Overview)}
+Chương trình được thiết kế theo mô hình Hướng đối tượng (OOP) kết hợp mẫu thiết kế \textbf{Game Loop Pattern} chuẩn trong công nghiệp phát triển trò chơi:
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[node distance=1.5cm, auto]
+    \tikzstyle{block} = [rectangle, draw, fill=blue!10, text width=9em, text centered, rounded corners, minimum height=3em]
+    \tikzstyle{line} = [draw, -latex', thick]
+
+    \node [block] (input) {1. Process Input (\texttt{kbhit()})};
+    \node [block, right=1.5cm of input] (update) {2. Update Game State};
+    \node [block, right=1.5cm of update] (render) {3. Flicker-Free Render};
+    
+    \path [line] (input) -- (update);
+    \path [line] (update) -- (render);
+    \path [line] (render.south) -- ++(0,-0.5) -| (input.south);
+\end{tikzpicture}
+\caption{Sơ đồ vòng lặp trò chơi (Game Loop)}
+\end{figure}
+
+\subsection{Các Class và Cấu trúc dữ liệu chính}
+\begin{itemize}
+    \item \textbf{\texttt{class Piece}:} Quản lý tọa độ $(x, y)$, loại gạch (\texttt{type} từ 0 đến 6) và trạng thái xoay (\texttt{rotation} từ 0 đến 3).
+    \item \textbf{\texttt{class TetrisGame}:} Lớp trung tâm điều phối toàn bộ tài nguyên:
+    \begin{itemize}
+        \item Mảng hai chiều \texttt{board[20][10]}: Lưu trạng thái màu sắc của từng ô cờ (-1 là ô rỗng).
+        \item Ma trận \texttt{PIECES[7][4][4][4]}: Bảng mã 4 trạng thái xoay của 7 loại Tetromino chuẩn.
+        \item Các biến quản lý điểm: \texttt{score}, \texttt{highScore}, \texttt{level}, \texttt{linesCleared}.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Các giải thuật then chốt}
+\subsubsection{1. Giải thuật xoay khối SRS \& Wall-Kick (\texttt{rotatePiece})}
+Khi người chơi bấm xoay khối ở sát viền bàn cờ, hệ thống sẽ thực hiện thử nghiệm vị trí mới; nếu bị chạm tường, giải thuật Wall-kick sẽ tự động dịch chuyển khối sang trái/phải 1 ô để người chơi không bị kẹt:
+\begin{lstlisting}
+void rotatePiece() {
+    int oldRot = currentPiece.rotation;
+    currentPiece.rotate();
+    if (!isValidPosition(currentPiece.x, currentPiece.y, currentPiece.rotation, currentPiece.type)) {
+        if (isValidPosition(currentPiece.x - 1, currentPiece.y, currentPiece.rotation, currentPiece.type))
+            currentPiece.x -= 1; // Wall-kick sang trai
+        else if (isValidPosition(currentPiece.x + 1, currentPiece.y, currentPiece.rotation, currentPiece.type))
+            currentPiece.x += 1; // Wall-kick sang phai
+        else
+            currentPiece.rotation = oldRot; // Khong xoay duoc thi hoan tac
+    }
+}
+\end{lstlisting}
+
+\subsubsection{2. Giải thuật kiểm tra va chạm \& Tính Ghost Piece}
+Hàm \texttt{isValidPosition(x, y, rot, type)} duyệt qua ma trận $4 \times 4$ của khối để kiểm tra giới hạn biên và các ô đã có gạch cố định. Hàm \texttt{getGhostY()} sử dụng hàm này để thả rơi giả lập tìm vị trí tiếp đất của bóng khối.
+
+\subsubsection{3. Kỹ thuật Render Console chống nhấp nháy (Flicker-Free)}
+Thay vì sử dụng \texttt{system("cls")} gây giật màn hình nghiêm trọng, nhóm sử dụng kỹ thuật định vị con trỏ \texttt{SetConsoleCursorPosition} về tọa độ gốc $(0,0)$ kết hợp ẩn con trỏ nhấp nháy (\texttt{SetConsoleCursorInfo}), giúp tốc độ hiển thị đạt 25--30 FPS cực kỳ mượt mà.
+
+\newpage
+
+% ==========================================
+% PHẦN 5: MÔ TẢ QUÁ TRÌNH LÀM VIỆC NHÓM
+% ==========================================
+\section{Mô tả quá trình làm việc nhóm (Team Collaboration)}
+
+\subsection{Các giai đoạn phát triển theo mô hình Scrum/Agile}
+Nhóm đã triển khai dự án qua 4 Sprint kéo dài trong 4 tuần:
+\begin{itemize}
+    \item \textbf{Sprint 1 (Tuần 1):} Họp khởi động dự án trên Slack, thống nhất Hợp đồng nhóm, tạo bảng GitHub Projects và dựng khung sườn Core Engine ban đầu.
+    \item \textbf{Sprint 2 (Tuần 2):} Phát triển Engine xoay khối SRS (Nguyễn Ngọc Duy) và hệ thống Render Console màu sắc không nhấp nháy (Phạm Phú Nguyễn Hưng).
+    \item \textbf{Sprint 3 (Tuần 3):} Tích hợp hệ thống tính điểm, cấp độ, hàng đợi Next Piece và tính năng Hold Piece.
+    \item \textbf{Sprint 4 (Tuần 4):} Bổ sung âm thanh Beep, lưu High Score, xử lý Game Over, giải quyết 3 xung đột Git và hoàn thiện báo cáo LaTeX.
+\end{itemize}
+
+\subsection{Thống kê định lượng mã nguồn trên Git}
+Dự án đã đáp ứng vượt mức toàn bộ các chỉ tiêu định lượng của môn học:
+\begin{itemize}
+    \item \textbf{Tổng số Commit:} \textbf{59 commits} (Yêu cầu $> 50$).
+    \item \textbf{Số lượng nhánh (Branches):} \textbf{7 branches} (Yêu cầu $> 6$):
+    \texttt{main}, \texttt{feature/rotate-srs}, \texttt{feature/console-ui-render}, \texttt{feature/score-level-next}, \texttt{feature/sound-highscore}, \texttt{feature/harddrop-hold}, \texttt{feature/gameover-pause-menu}.
+    \item \textbf{Số lượng Merge Conflicts đã giải quyết:} \textbf{3 conflicts} (Yêu cầu $> 3$).
+    \item \textbf{Tỷ lệ tham gia đóng góp mã nguồn:} \textbf{100\% (3/3 thành viên)}.
+\end{itemize}
+
+\subsection{Chi tiết 3 tình huống xung đột (Git Conflicts) và cách giải quyết}
+\begin{enumerate}
+    \item \textbf{Conflict 1 (Giao diện \& Engine xoay khối):} Xảy ra khi merge nhánh \texttt{feature/console-ui-render} vào \texttt{main} do cùng sửa đổi hàm vẽ màn hình và ma trận khối. \textit{Giải pháp:} Nhóm họp trên Slack, thống nhất giữ cấu trúc ma trận 4 chiều chuẩn SRS và áp dụng bảng màu Console của Hưng.
+    \item \textbf{Conflict 2 (Điểm số \& Cấu hình âm thanh):} Xung đột tại các sự kiện xóa dòng giữa nhánh \texttt{feature/score-level-next} và \texttt{feature/sound-highscore}. \textit{Giải pháp:} Tích hợp gọi hàm \texttt{playSoundEffect(3)} đồng thời với việc cộng điểm trong hàm \texttt{clearLines()}.
+    \item \textbf{Conflict 3 (Hard Drop \& Máy trạng thái Game Over):} Xung đột tại vòng lặp \texttt{main()} khi xử lý chuyển trạng thái game. \textit{Giải pháp:} Đồng bộ máy trạng thái \texttt{isPaused} và \texttt{isGameOver} đồng bộ với thao tác phím bấm.
+\end{enumerate}
+
+\newpage
+
+% ==========================================
+% PHẦN 6: CÁC KỸ NĂNG ĐÃ ÁP DỤNG
+% ==========================================
+\section{Các kỹ năng đã áp dụng trong đồ án}
+
+\subsection{Kỹ năng kỹ thuật và công cụ chuyên môn}
+\begin{itemize}
+    \item \textbf{Lập trình C++ nâng cao:} Vận dụng mô hình Hướng đối tượng (OOP), quản lý mảng đa chiều, thao tác thư viện Windows API (\texttt{conio.h}, \texttt{windows.h}) và đọc/ghi file nhị phân.
+    \item \textbf{Quản lý phiên bản với Git/GitHub:} Thành thạo quy trình Git Flow chuyên nghiệp: rẽ nhánh tính năng (\texttt{feature branches}), giải quyết xung đột mã nguồn (\texttt{merge conflicts}), tạo và review \texttt{Pull Requests}.
+    \item \textbf{Soạn thảo học thuật bằng LaTeX:} Ứng dụng Overleaf để tạo tài liệu chuẩn quốc tế với bảng biểu, công thức toán học và sơ đồ TikZ.
+\end{itemize}
+
+\subsection{Kỹ năng mềm và làm việc nhóm}
+\begin{itemize}
+    \item \textbf{Kỹ năng giao tiếp và làm việc nhóm:} Trao đổi rõ ràng, văn minh trên Slack \texttt{ss004f31.slack.com}, tổ chức các cuộc họp Standup ngắn 15 phút mỗi tuần để cập nhật tiến độ.
+    \item \textbf{Kỹ năng quản lý dự án:} Ứng dụng bảng Kanban trực quan để phân chia đầu việc (To Do, In Progress, Review, Done), theo dõi chặt chẽ tiến độ công việc của từng thành viên.
+    \item \textbf{Kỹ năng giải quyết vấn đề và phản biện:} Chủ động phân tích nguyên nhân lỗi nhấp nháy màn hình và cùng nhau nghiên cứu giải pháp tối ưu thay thế.
+\end{itemize}
+
+\newpage
+
+% ==========================================
+% PHẦN 7: ĐÁNH GIÁ THỰC HIỆN HỢP ĐỒNG NHÓM
+% ==========================================
+\section{Đánh giá việc thực hiện hợp đồng nhóm}
+
+\subsection{Tiêu chí đánh giá nội bộ}
+Nhóm đã thống nhất thang điểm đánh giá dựa trên 4 tiêu chí cốt lõi:
+\begin{enumerate}
+    \item \textbf{Chất lượng công việc (40\%):} Mã nguồn chạy đúng, không phát sinh lỗi, tuân thủ Clean Code.
+    \item \textbf{Đúng tiến độ Deadline (30\%):} Hoàn thành nhiệm vụ trước hoặc đúng thời hạn đã cam kết.
+    \item \textbf{Tham gia họp và thảo luận (15\%):} Có mặt đầy đủ các buổi họp nhóm trên Slack.
+    \item \textbf{Tinh thần trách nhiệm \& hỗ trợ đồng đội (15\%):} Tích cực giúp đỡ các thành viên khác giải quyết khó khăn kỹ thuật.
+\end{enumerate}
+
+\subsection{Bảng đánh giá mức độ đóng góp của từng thành viên}
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{cllcX}
+\toprule
+\textbf{STT} & \textbf{Họ và Tên} & \textbf{MSSV} & \textbf{Tỷ lệ đóng góp} & \textbf{Đánh giá xếp loại} \\
+\midrule
+1 & Huỳnh Nguyễn Hoài Thương & 26730069 & 100\% & Hoàn thành xuất sắc nhiệm vụ Trưởng nhóm \\
+2 & Nguyễn Ngọc Duy & 26730013 & 100\% & Hoàn thành xuất sắc module Xoay SRS \& Điểm số \\
+3 & Phạm Phú Nguyễn Hưng & 26730023 & 100\% & Hoàn thành xuất sắc Quản trị Git, UI \& Báo cáo \\
+\bottomrule
+\end{tabularx}
+\caption{Bảng tổng kết đánh giá mức độ hoàn thành nhiệm vụ}
+\end{table}
+
+\begin{tcolorbox}[colback=blue!5!white,colframe=blue!60!black]
+    \textbf{Kết luận:} 100\% thành viên trong nhóm đều thể hiện tinh thần trách nhiệm cao, hoàn thành đầy đủ các phần việc được giao đúng cam kết trong Hợp đồng nhóm và xứng đáng đạt điểm tuyệt đối cho phần thực hành làm việc nhóm.
+\end{tcolorbox}
+
+\end{document}
