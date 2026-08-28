@@ -4,3 +4,4 @@
 // Step 4: SRS rotation matrix & wall kick checks for piece 4
 // Step 5: SRS rotation matrix & wall kick checks for piece 5
 // Step 6: SRS rotation matrix & wall kick checks for piece 6
+// Step 7: SRS rotation matrix & wall kick checks for piece 7
