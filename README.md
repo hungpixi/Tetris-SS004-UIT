@@ -14,11 +14,11 @@
 ---
 
 ## 👥 Danh Sách Thành Viên & Phân Công Nhiệm Vụ
-| STT | Họ và Tên | MSSV | Email UIT / Slack | Vai trò | Nhiệm vụ chính | Nhánh Git |
+| STT | Họ và Tên | MSSV | Email UIT / Slack / GitHub | Vai trò | Nhiệm vụ chính | Nhánh Git |
 | :---: | :--- | :---: | :--- | :--- | :--- | :--- |
-| 1 | **Huỳnh Nguyễn Hoài Thương** | `26730069` | `26730069@gm.uit.edu.vn`<br>`@26730069.Huỳnh Nguyễn Hoài Thương` | **Trưởng nhóm** | Định hướng dự án, phân chia công việc, kiến trúc Core & Review PRs | `main` |
-| 2 | **Nguyễn Ngọc Duy** | `26730013` | `26730013@gm.uit.edu.vn`<br>`@26730013.Nguyễn Ngọc Duy` | Thành viên | Engine xoay khối SRS, Wall-Kick, hệ thống tính điểm & Level | `feature/rotate-srs`<br>`feature/score-level-next` |
-| 3 | **Phạm Phú Nguyễn Hưng** | `26730023` | `26730023@gm.uit.edu.vn`<br>`@26730023.Phạm Phú Nguyễn Hưng`<br>(GitHub: `hungpixi`) | Thành viên | Quản trị repo GitHub, UI Console màu sắc không giật, Âm thanh Beep, Next/Hold Piece & Báo cáo | `feature/console-ui-render`<br>`feature/sound-highscore`<br>`feature/harddrop-hold` |
+| 1 | **Huỳnh Nguyễn Hoài Thương** | `26730069` | `26730069@gm.uit.edu.vn`<br>`@26730069.Huỳnh Nguyễn Hoài Thương`<br>GitHub: [`26730069-HuynhNguyenHoaiThuong`](https://github.com/26730069-HuynhNguyenHoaiThuong) | **Trưởng nhóm** | Định hướng dự án, phân chia công việc, kiến trúc Core & Review PRs | `main` |
+| 2 | **Nguyễn Ngọc Duy** | `26730013` | `26730013@gm.uit.edu.vn`<br>`@26730013.Nguyễn Ngọc Duy`<br>GitHub: [`26730013-NguyenNgocDuy`](https://github.com/26730013-NguyenNgocDuy) | Thành viên | Engine xoay khối SRS, Wall-Kick, hệ thống tính điểm & Level | `feature/rotate-srs`<br>`feature/score-level-next` |
+| 3 | **Phạm Phú Nguyễn Hưng** | `26730023` | `26730023@gm.uit.edu.vn`<br>`@26730023.Phạm Phú Nguyễn Hưng`<br>GitHub: [`hungpixi`](https://github.com/hungpixi) | Thành viên | Quản trị repo GitHub, UI Console màu sắc không giật, Âm thanh Beep, Next/Hold Piece & Báo cáo | `feature/console-ui-render`<br>`feature/sound-highscore`<br>`feature/harddrop-hold` |
 
 ---
 
